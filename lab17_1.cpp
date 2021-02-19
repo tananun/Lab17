@@ -20,21 +20,68 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
+void importDataFromFile(string filename,vector<string> &names,vector<int> &scores,vector<char> &grades){
+    ifstream source;
+    source.open(filename.c_str());
+    string textline;
+    char tempname[100];
+    char tempgrad;
+    int score1,score2,score3,sumscore = 0;
+    char fomat[] = "%[^:]: %d %d %d" ;
+    while (getline(source,textline)){
+        sscanf(textline.c_str(),fomat,tempname,&score1,&score2,&score3);
+        sumscore = score1+score2+score3;
+        tempgrad = score2grade(sumscore);
+        names.push_back(tempname);
+        scores.push_back(sumscore);
+        grades.push_back(tempgrad);
+    }
 
 }
 
-void getCommand(){
-
+void getCommand(string &command,string &key){
+    string temp = "";
+    int start = 0;
+    cout << "Please input your command: ";
+    getline(cin,temp);
+    start = temp.find_first_of(" ");
+    command = temp.substr(0,start);
+    key = temp.substr(start+1,temp.size());
 }
 
-void searchName(){
-
+void searchName(vector<string> names,vector<int> scores,vector<char> grades,string key){
+        cout << "---------------------------------"<< endl;
+        int check = 0;
+    for (unsigned int i = 0; i < names.size(); i++) {
+        if (key== toUpperStr(names[i])){
+            cout << names[i] << "'s score = " << scores[i] << endl;
+            cout << names[i] << "'s grade = " << grades[i] << endl;
+            check = 1;
+        }
+    }
+    if (check == 0){
+        cout << "Cannot found."<< endl;
+    }
+    cout << "---------------------------------"<< endl;
 }
 
-void searchGrade(){
+void searchGrade(vector<string> names,vector<int> scores,vector<char> grades,string key){
+        cout << "---------------------------------"<< endl;
+        int check = 0;
+    for (unsigned int i = 0; i < grades.size(); i++) {
+        string Bkey = toUpperStr(key);
+        char BBkey = Bkey[0];
+         if (BBkey == grades[i]){
+            cout << names[i] << " " << "(" << scores[i] << ")" << endl;
+            check = 1;
+        }
+    }
+    if (check == 0){
+        cout << "Cannot found."<< endl;
+    }
+    cout << "---------------------------------"<< endl;
 
-}
+    }
 
 
 int main(){
